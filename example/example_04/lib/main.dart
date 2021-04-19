@@ -24,7 +24,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool start = false;
   bool run = false;
-  Directory storageDir;
+  Directory? storageDir;
   String parentFolder = "drawing_animation";
   //Resulting in  a folder called `simple` containing simple_0.png ... simple_100.png
   String projectName = "project1";
@@ -46,12 +46,13 @@ class _MyHomePageState extends State<MyHomePage> {
       //External storage
       this.storageDir = (await getExternalStorageDirectory());
       //current project
+      if(storageDir == null ) return;
       this.storageDir = Directory(
-          "${this.storageDir.path}/${this.parentFolder}/${this.projectName}");
+          "${storageDir!.path}/${parentFolder}/${projectName}");
       //Replace existing project folder
-      if (await this.storageDir.exists())
-        this.storageDir.deleteSync(recursive: true);
-      this.storageDir = await this.storageDir.create(recursive: true);
+      if (await storageDir!.exists())
+        storageDir!.deleteSync(recursive: true);
+      storageDir = await storageDir!.create(recursive: true);
       setState(() {
         this.start = true;
       });
@@ -103,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //Here starts the Metatron-------------------------------
   final double r = 2;
-  List<Path> metatron;
+  List<Path> metatron = [];
   Grid g = new Grid();
 
   Path circle(Offset offset) {
@@ -128,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Path center(Offset a, Offset b) {
-    Offset cp = Offset.lerp(a, b, 0.5);
+    Offset cp = Offset.lerp(a, b, 0.5) ?? Offset.zero;
     return line(cp, g[2][2]);
   }
 
@@ -141,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Path out(Offset a) {
     Offset cp = Offset.lerp(g[2][2], a,
-        3 / 4); //TODO make it so only depends on r - no hardcoded values
+        3 / 4) ??  Offset.zero; //TODO make it so only depends on r - no hardcoded values
     return line(g[2][2], cp);
   }
 
@@ -164,8 +165,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Paint colorize(int index) {
     //Main colors
     Color primaryColor = Colors.blueAccent;
-    Color secondaryColor = Colors.orangeAccent[100];
-    Color doodleColor = Colors.grey[300];
+    Color secondaryColor = Colors.orangeAccent[100]!;
+    Color doodleColor = Colors.grey[300]!;
     //Theme Flutter:
     // Color primaryColor = Colors.blue[600];
     // Color secondaryColor = Colors.yellow[700];
@@ -241,7 +242,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   List<Path> createMetatron() {
-    List<Path> paths = List();
+    List<Path> paths = [];
 
     //Inner circles 0 - 5
     paths

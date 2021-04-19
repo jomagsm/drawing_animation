@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 
 import 'parser.dart';
@@ -10,11 +9,10 @@ import 'parser.dart';
 /// Ordering the [PathSegment] elements based on the properties of the respective parent Path is still work in progress and will be possible soon.
 class PathOrder {
   /// The [PathSegment] order is defined according to their respective length, starting with the longest element. If [reverse] is true, the smallest element is selected first.
-  PathOrder.byLength({reverse = false})
-      : this._comparator = _byLength(reverse: reverse);
+  PathOrder.byLength({reverse = false}) : this._comparator = _byLength(reverse: reverse);
 
   /// The [PathSegment] order is defined according to its position in the overall bounding box. The position is defined as the center of the respective bounding box of each [PathSegment] element. The field [direction] specifies in which direction the position attribute is compared.
-  PathOrder.byPosition({@required AxisDirection direction})
+  PathOrder.byPosition({required AxisDirection direction})
       : this._comparator = _byPosition(direction: direction);
 
   /// Internal
@@ -39,40 +37,23 @@ class PathOrder {
           };
   }
 
-  static Comparator<PathSegment> _byPosition(
-      {@required AxisDirection direction}) {
+  static Comparator<PathSegment> _byPosition({required AxisDirection direction}) {
     switch (direction) {
       case AxisDirection.left:
         return (PathSegment a, PathSegment b) {
-          return b.path
-              .getBounds()
-              .center
-              .dx
-              .compareTo(a.path.getBounds().center.dx);
+          return b.path.getBounds().center.dx.compareTo(a.path.getBounds().center.dx);
         };
       case AxisDirection.right:
         return (PathSegment a, PathSegment b) {
-          return a.path
-              .getBounds()
-              .center
-              .dx
-              .compareTo(b.path.getBounds().center.dx);
+          return a.path.getBounds().center.dx.compareTo(b.path.getBounds().center.dx);
         };
       case AxisDirection.up:
         return (PathSegment a, PathSegment b) {
-          return b.path
-              .getBounds()
-              .center
-              .dy
-              .compareTo(a.path.getBounds().center.dy);
+          return b.path.getBounds().center.dy.compareTo(a.path.getBounds().center.dy);
         };
       case AxisDirection.down:
         return (PathSegment a, PathSegment b) {
-          return a.path
-              .getBounds()
-              .center
-              .dy
-              .compareTo(b.path.getBounds().center.dy);
+          return a.path.getBounds().center.dy.compareTo(b.path.getBounds().center.dy);
         };
       default:
         return PathOrder._original()._getComparator();
@@ -123,20 +104,16 @@ class PathOrders {
   static PathOrder original = PathOrder._original();
 
   /// [PathSegment] elements which are located left-most of the overall bounding box are considered first.
-  static PathOrder leftToRight =
-      PathOrder.byPosition(direction: AxisDirection.right);
+  static PathOrder leftToRight = PathOrder.byPosition(direction: AxisDirection.right);
 
   /// [PathSegment] elements which are located right-most of the overall bounding box are considered first.
-  static PathOrder rightToLeft =
-      PathOrder.byPosition(direction: AxisDirection.left);
+  static PathOrder rightToLeft = PathOrder.byPosition(direction: AxisDirection.left);
 
   /// [PathSegment] elements which are located at the very top of the overall bounding box are considered first.
-  static PathOrder topToBottom =
-      PathOrder.byPosition(direction: AxisDirection.down);
+  static PathOrder topToBottom = PathOrder.byPosition(direction: AxisDirection.down);
 
   /// [PathSegment] elements which are located at the very bottom of the overall bounding box are considered first.
-  static PathOrder bottomToTop =
-      PathOrder.byPosition(direction: AxisDirection.up);
+  static PathOrder bottomToTop = PathOrder.byPosition(direction: AxisDirection.up);
 
   /// [PathSegment] elements which are smallest in size are considered first.
   static PathOrder increasingLength = PathOrder.byLength(reverse: true);
