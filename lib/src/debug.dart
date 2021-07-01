@@ -7,8 +7,8 @@ class DebugOptions {
     this.showViewPort = false,
     this.recordFrames = false,
     this.resolutionFactor = 1.0,
-    this.fileName = "",
-    this.outPutDir = "",
+    this.fileName = '',
+    this.outPutDir = '',
   });
 
   final bool showBoundingBox;

@@ -50,11 +50,11 @@ class AnimatedDrawing extends StatefulWidget {
     this.lineAnimation = LineAnimation.oneByOne,
     this.scaleToViewport = true,
     this.debug,
-  })  : this.paths = [],
-        this.paints = []
+  })  : paths = [],
+        paints = []
         {
     assertAnimationParameters();
-    assert(this.assetPath.isNotEmpty);
+    assert(assetPath.isNotEmpty);
   }
 
   /// Creates an instance of [AnimatedDrawing] by directly passing path elements to the constructor (still experimental).
@@ -98,11 +98,11 @@ class AnimatedDrawing extends StatefulWidget {
     this.lineAnimation = LineAnimation.oneByOne,
     this.scaleToViewport = true,
     this.debug,
-  }) : this.assetPath = ''
+  }) : assetPath = ''
   {
     assertAnimationParameters();
-    assert(this.paths.isNotEmpty);
-    if (this.paints.isNotEmpty) assert(this.paints.length == this.paths.length);
+    assert(paths.isNotEmpty);
+    if (paints.isNotEmpty) assert(paints.length == paths.length);
   }
 
   /// Provide path data via an SVG asset.
@@ -184,14 +184,14 @@ class AnimatedDrawing extends StatefulWidget {
 
   @override
   AbstractAnimatedDrawingState createState() {
-    if (this.controller != null) {
-      return new AnimatedDrawingState();
+    if (controller != null) {
+      return AnimatedDrawingState();
     }
-    return new AnimatedDrawingWithTickerState();
+    return AnimatedDrawingWithTickerState();
   }
 
   // TODO Refactor SRP
   void assertAnimationParameters() {
-    assert(!(this.controller == null && (this.run == null || this.duration == null)));
+    assert(!(controller == null && (run == null || duration == null)));
   }
 }
